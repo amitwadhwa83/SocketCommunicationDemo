@@ -22,23 +22,25 @@ import org.apache.commons.io.IOUtils;
 public class Player {
     public static final String HOST = "127.0.0.1";
     public static final int PORT = 5000;
-    private static final AtomicInteger messageCount = new AtomicInteger(0);
+    private static final int MAX_MESAGE_COUNT = 10;
+    private static final AtomicInteger MESSAGE_COUNT = new AtomicInteger(0);
 
     public int increment() {
-	return messageCount.incrementAndGet();
+	return MESSAGE_COUNT.incrementAndGet();
     }
 
     public int value() {
-	return messageCount.get();
+	return MESSAGE_COUNT.get();
     }
 
     /**
      * This method is used to initiate the communication between Player(s). It takes
-     * input from console and pass it on to receiver(s) for processing.
+     * input from console and pass it on to receiver(s) for processing and then wait
+     * for the processed message
      */
     public void startInitiator() {
-	BufferedReader dis = null;
-	DataInputStream disResponse = null;
+	BufferedReader br = null;
+	DataInputStream dis = null;
 	DataOutputStream dos = null;
 	Socket socket = null;
 	try {
@@ -47,26 +49,28 @@ public class Player {
 	    System.out.println("Initiator:Connected");
 
 	    // Create I/O streams for communication
-	    dis = new BufferedReader(new InputStreamReader(System.in));
-	    disResponse = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+	    br = new BufferedReader(new InputStreamReader(System.in));
+	    dis = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
 	    dos = new DataOutputStream(socket.getOutputStream());
 
-	    // Reads message until 10 messages are received and sent back
-	    while (messageCount.get() != 10) {
-		String line = dis.readLine();
+	    // Reads message until 10 messages read, forwarded and received back
+	    while (MESSAGE_COUNT.get() != MAX_MESAGE_COUNT) {
+		String line = br.readLine();
+
 		System.out.println("Initiator:Sending message:" + line);
 		dos.writeUTF(line);
-		System.out.println("Initiator:Got back message:" + disResponse.readUTF());
+
+		System.out.println("Initiator:Got back message:" + dis.readUTF());
 	    }
 	} catch (UnknownHostException unknownHostException) {
 	    System.out.println("Initiator:UnknownHost Exception:" + unknownHostException);
 	    unknownHostException.printStackTrace();
 	} catch (IOException ioException) {
-	    System.out.println("Initiator:IO Error line terminated abruptly:" + ioException);
+	    System.out.println("Initiator:IO Exception:" + ioException);
 	    ioException.printStackTrace();
 	} finally {
 	    System.out.println("Initiator:Closing resources");
-	    closeAllResource(dis, disResponse, dos, socket);
+	    closeAllResource(br, dis, dos, socket);
 	}
     }
 
@@ -92,14 +96,16 @@ public class Player {
 	    dos = new DataOutputStream(socket.getOutputStream());
 
 	    // Reads message and process until 10 messages are received and sent back
-	    while (messageCount.get() != 10) {
+	    while (MESSAGE_COUNT.get() != MAX_MESAGE_COUNT) {
 		String line = dis.readUTF();
 		System.out.println("Receiver:Got message:" + line);
+
 		String response = line + increment();
 		System.out.println("Receiver:Sending back message:" + response);
 		dos.writeUTF(response);
 	    }
 	} catch (IOException ioException) {
+	    System.out.println("Initiator:IO Exception:" + ioException);
 	    ioException.printStackTrace();
 	} finally {
 	    System.out.println("Receiver:Closing resources");

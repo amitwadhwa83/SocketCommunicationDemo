@@ -8,8 +8,8 @@ package com.sample.players;
 public class LaunchPlayer {
     public static void main(String args[]) {
 
-	// Starting initiator in separate thread to start communication between players
-	// in the same java process
+	// Starting initiator in separate thread for running communication between
+	// players in the same java process
 	new Thread() {
 	    public void run() {
 		Player initiator = new Player();
@@ -20,5 +20,6 @@ public class LaunchPlayer {
 	// Starting receiver
 	Player receiver = new Player();
 	receiver.startReceiver();
+	System.out.println("Ending the communication");
     }
 }

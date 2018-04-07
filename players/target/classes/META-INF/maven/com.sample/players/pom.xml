@@ -9,19 +9,20 @@
 	<packaging>jar</packaging>
 
 	<name>players</name>
+	<description>players developed by Amit</description>
 	<url>http://maven.apache.org</url>
+	<developers>
+		<developer>
+			<name>Amit wadhwa</name>
+			<email>amitwadhwa83@gmail.com</email>
+		</developer>
+	</developers>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
-			<scope>test</scope>
-		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
@@ -34,11 +35,11 @@
 				<!-- Build an executable JAR -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.0.2</version>
 				<configuration>
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>
-							<classpathPrefix>lib/</classpathPrefix>
 							<mainClass>com.sample.players.LaunchPlayer</mainClass>
 						</manifest>
 					</archive>
