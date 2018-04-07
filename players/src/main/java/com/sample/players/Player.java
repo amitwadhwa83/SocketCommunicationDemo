@@ -44,7 +44,7 @@ public class Player {
 	try {
 	    // Establish a connection
 	    socket = new Socket(HOST, PORT);
-	    System.out.println("Initiator:Connected to ");
+	    System.out.println("Initiator:Connected");
 
 	    // Create I/O streams for communication
 	    dis = new BufferedReader(new InputStreamReader(System.in));
