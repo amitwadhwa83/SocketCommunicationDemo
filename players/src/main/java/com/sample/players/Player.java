@@ -53,7 +53,8 @@ public class Player {
 	    dis = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
 	    dos = new DataOutputStream(socket.getOutputStream());
 
-	    // Reads message until 10 messages read, forwarded and received back
+	    // Reads message until allowed threshold of messages read, forwarded and
+	    // received back
 	    while (MESSAGE_COUNT.get() != MAX_MESAGE_COUNT) {
 		String line = br.readLine();
 
@@ -95,7 +96,8 @@ public class Player {
 	    dis = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
 	    dos = new DataOutputStream(socket.getOutputStream());
 
-	    // Reads message and process until 10 messages are received and sent back
+	    // Reads message until allowed threshold of messages read, processed and sent
+	    // back
 	    while (MESSAGE_COUNT.get() != MAX_MESAGE_COUNT) {
 		String line = dis.readUTF();
 		System.out.println("Receiver:Got message:" + line);
