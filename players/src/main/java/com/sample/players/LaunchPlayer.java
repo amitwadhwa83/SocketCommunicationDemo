@@ -12,14 +12,12 @@ public class LaunchPlayer {
 	// players in the same java process
 	new Thread() {
 	    public void run() {
-		Player initiator = new Player();
-		initiator.startInitiator();
+		new Player().startInitiator();
 	    }
 	}.start();
 
 	// Starting receiver
-	Player receiver = new Player();
-	receiver.startReceiver();
+	new Player().startReceiver();
 	System.out.println("Ending the communication");
     }
 }
